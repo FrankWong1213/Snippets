@@ -1,0 +1,21 @@
+# refer to 
+# http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+# https://www.nginx.com/blog/nginx-poodle-ssl/
+# set the Perfect Forward Secrecy by openssl dhparam -rand - 2048 >>ssl.crt
+# final you can check your site by https://www.ssllabs.com/ssltest/index.html
+
+server
+{
+    listen       80;
+    server_name  domain.com;
+    rewrite    ^ https://domain.com$request_uri? permanent;
+}
+server 
+{  
+	listen 443 ssl;
+	server_name  domain.com
+	index index.html index.htm index.php;
+	ssl_certificate ssl.crt;
+	ssl_certificate_key ssl.key;
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;# omit SSLv3 because of POODLE (CVE-2014-3566)
+}
