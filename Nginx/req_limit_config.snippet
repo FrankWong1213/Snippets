@@ -1,0 +1,32 @@
+http {
+ 
+    geo $limited {
+        default           1;
+        121.41.105.67  0;//白名单，不限制访问频率
+    }
+    #map指令映射白名单的ip为空串
+    map $limited $limit {
+        1        $binary_remote_addr;
+        0        "";
+    } 
+    #定义一个名为foo的limit_zone,大小10M内存来存储session，
+    #  以$limit 为key
+    #限制访问频率为每秒5次
+    limit_req_zone $limit zone=foo:10m rate=5r/s;
+
+}
+
+
+
+server {
+    listen       80;
+    server_name  localhost;
+ 
+    #charset koi8-r;
+    #access_log  /var/log/nginx/log/host.access.log  main;
+ 
+    location / {
+    limit_req zone=foo burst=5 nodelay;
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+}       

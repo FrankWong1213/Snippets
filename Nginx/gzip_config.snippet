@@ -1,0 +1,8 @@
+gzip            on;
+gzip_min_length 1k;//只压缩大于1K的文件
+gzip_buffers 4 16k;
+#gzip_http_version 1.0;//默认1.1
+gzip_comp_level 2;//压缩级别，1-10，数字越大压缩的越好，时间也越长
+gzip_types  text/plain application/javascript application/x-javascript text/javascript text/xml text/css;
+gzip_vary on;//Squid等缓存服务有关，on的话会在Header里增加"Vary: Accept-Encoding"
+gzip_disable "MSIE [1-6]."; //取消对IE6的支持

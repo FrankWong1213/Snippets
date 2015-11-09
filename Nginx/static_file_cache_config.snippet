@@ -1,0 +1,5 @@
+location ~ .(htm|html|gif|jpg|jpeg|png|ico|rar|css|js|zip|txt|flv|swf|doc|ppt|xls|pdf)$ {
+           root  /opt/webapp/cache;//静态资源路径
+           access_log off;
+           expires 24h;//cache有效时间 这边设置成1天
+}

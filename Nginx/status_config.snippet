@@ -1,0 +1,6 @@
+location ~ ^/NginxStatus {
+           stub_status on;//开启状态查看
+           access_log off;//关闭日志
+           allow   127.0.0.1;//设置仅能本机查看
+           deny    all;
+}
