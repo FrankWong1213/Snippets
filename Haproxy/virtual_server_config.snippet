@@ -1,0 +1,10 @@
+frontend http-in
+    bind *:80
+    acl is_gitsea_com hdr_end(host) -i gitsea.com
+    use_backend gitsea_com if is_gitsea_com
+    default_backend gitsea_com
+ 
+backend gitsea_com
+    balance roundrobin
+    server Server1 127.0.0.1:8080
+    server Server2 127.0.0.1:8081

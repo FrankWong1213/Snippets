@@ -1,0 +1,13 @@
+frontend  http-in
+    bind *:80
+    acl url_static       path_beg       -i /static /images /javascript /stylesheets
+    acl url_static       path_end       -i .jpg .gif .png .css .js
+ 
+    use_backend static          if url_static
+    default_backend             app
+ 
+backend static
+    balance     roundrobin
+    # set an expires header to now+1 hour in every response
+    http-response set-header Expires %[date(3600),http_date]
+    server      static 127.0.0.1:4331 check

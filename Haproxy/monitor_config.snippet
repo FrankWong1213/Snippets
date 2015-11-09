@@ -1,0 +1,7 @@
+listen stats :8888
+    mode http
+    stats enable
+    stats hide-version
+    stats realm Haproxy\ Statistics
+    stats uri /
+    stats auth Username:Password

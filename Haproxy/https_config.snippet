@@ -1,0 +1,22 @@
+#整合ssl证书
+cat gitsea.com.crt gitsea.com.key > gitsea.com.pem
+ 
+编辑haproxy.cfg
+frontend localhost
+    bind *:80
+    bind *:443 ssl crt /etc/ssl/gitsea.com.pem
+    #如果只允许https访问,可以增加如下设置
+    redirect scheme https if !{ ssl_fc }
+    mode http
+    default_backend nodes
+ 
+backend nodes
+    mode http
+    balance roundrobin
+    #请求ip 赋值到http header  "X-Forwarded-For"  中
+    option forwardfor except 127.0.0.1
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    http-request set-header X-Forwarded-Port %[dst_port]
+    server web01 127.0.0.1:9000 check
+    server web02 127.0.0.1:9001 check
+    server web03 127.0.0.1:9002 check
